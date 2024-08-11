@@ -13,7 +13,7 @@ class PostsProvider extends ChangeNotifier {
 
     if (callResult.isSuccess) {
       if (callResult.data != null && callResult.data is List) {
-        posts = callResult.data.map((postJson) => Post.fromJson(postJson)).toList();
+        posts = (callResult.data as List).map((postJson) => Post.fromJson(postJson)).toList();
       } else {
         print('Error fetching posts: Data format is not as expected');
       }

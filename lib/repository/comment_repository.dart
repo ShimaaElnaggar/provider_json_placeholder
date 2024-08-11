@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:provider_json_placeholder/models/call_result.dart';
 import 'package:provider_json_placeholder/repository/call_repository.dart';
 import 'package:provider_json_placeholder/services/dio_services.dart';
@@ -20,7 +19,7 @@ class CommentsRepository extends CallRepository {
         return CallResult(
             status: response.statusCode!,
             statusMessage: response.statusMessage!,
-            data: json.decode(response.data),
+            data: response.data,
             isSuccess: true,
             error: '');
       } else {
