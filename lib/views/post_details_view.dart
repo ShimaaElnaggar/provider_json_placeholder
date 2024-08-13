@@ -46,91 +46,100 @@ class _CommentsViewState extends State<CommentsView> {
               height: isExpanded ? 180 : 0,
               duration: const Duration(milliseconds: 400),
               child: SingleChildScrollView(
-                child: PhysicalModel(
-                    clipBehavior: Clip.antiAlias,
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.post.title,
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w700),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(widget.post.body,
-                              style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black54)),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.person,
-                                color: Colors.blue.shade100,
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                widget.post.userId.toString(),
-                                style: TextStyle(color: Colors.purple.shade200),
-                              )
-                            ],
-                          )
-
-                          // post details
-                        ],
-                      ),
-                    )),
+                child: buildPostPhysicalModel(),
               ),
             ),
             const SizedBox(height: 15),
             const Text('  Comments:',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
             const SizedBox(height: 5),
-            Consumer<CommentsProvider>(
-              builder: (context, commentsProvider, _) {
-                if (commentsProvider.comments.isEmpty) {
-                  return Center(
-                      child: CircularProgressIndicator(
-                    color: Colors.blue.shade200,
-                  ));
-                }
-                return ListView.builder(
-                  itemCount: commentsProvider.comments.length,
-                  itemBuilder: (context, index) {
-                    final comment = commentsProvider.comments[index];
-
-                    return Card(
-                      color: Colors.blue.shade50,
-                      surfaceTintColor: Colors.white,
-                      child: ListTile(
-                        title: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            comment.body,
-                            style: const TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            comment.email,
-                            style: TextStyle(color: Colors.blue.shade200),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+            commentsConsumer(),
           ],
         ),
+      ),
+    );
+  }
+
+  PhysicalModel buildPostPhysicalModel() {
+    return PhysicalModel(
+        clipBehavior: Clip.antiAlias,
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                widget.post.title,
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 10),
+              Text(widget.post.body,
+                  style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black54)),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Icon(
+                    Icons.person,
+                    color: Colors.blue.shade100,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    widget.post.userId.toString(),
+                    style: TextStyle(color: Colors.blue.shade200),
+                  )
+                ],
+              )
+
+              // post details
+            ],
+          ),
+        ));
+  }
+
+  Expanded commentsConsumer() {
+    return Expanded(
+      child: Consumer<CommentsProvider>(
+        builder: (context, commentsProvider, _) {
+          if (commentsProvider.comments.isEmpty) {
+            return Center(
+                child: CircularProgressIndicator(
+              color: Colors.blue.shade200,
+            ));
+          }
+          return ListView.builder(
+            itemCount: commentsProvider.comments.length,
+            itemBuilder: (context, index) {
+              final comment = commentsProvider.comments[index];
+              return Card(
+                color: Colors.blue.shade50,
+                surfaceTintColor: Colors.white,
+                child: ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      comment.body,
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      comment.email,
+                      style: TextStyle(color: Colors.blue.shade200),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
